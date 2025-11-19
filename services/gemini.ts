@@ -1,4 +1,5 @@
 import { GoogleGenAI, FunctionDeclaration, Type } from "@google/genai";
+import { SYSTEM_PROMPT_STANDARD, SYSTEM_PROMPT_THINKING } from "../constants";
 
 // Helper to get API key securely
 const getApiKey = () => process.env.API_KEY || '';
@@ -30,7 +31,7 @@ export const generateStandardResponse = async (prompt: string, history: any[]) =
   const chat = ai.chats.create({
     model: model,
     config: {
-      systemInstruction: "You are the AetherForge Oracle. Assist with technical implementation details of the workflow.",
+      systemInstruction: SYSTEM_PROMPT_STANDARD,
       tools: [{ googleSearch: {} }] // Enable grounding for up-to-date info
     },
     history: history
@@ -61,7 +62,7 @@ export const generateDeepThoughtResponse = async (prompt: string) => {
     contents: prompt,
     config: {
       thinkingConfig: { thinkingBudget: 16000 }, // High budget for complex strategy
-      systemInstruction: "You are the Strategic Core of AetherForge. Analyze the user's scaling problem deeply using systems theory.",
+      systemInstruction: SYSTEM_PROMPT_THINKING,
     }
   });
 

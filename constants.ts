@@ -96,15 +96,29 @@ def generate_tool(need_description):
     modules: [
       {
         title: "The Constitution Module",
-        description: "Implementation of the 'SupremeCourt' class. Reviews all AI-generated strategies against legal and ethical datasets to prevent bans or reputational damage.",
-        metrics: [{ label: "Compliance", value: "100%" }, { label: "Risk", value: "Mitigated" }],
+        description: "Implementation of the 'SupremeCourt' class. Reviews all AI-generated strategies against legal regulations, ethical guidelines, and platform TOS. Rejects violations to prevent bans and maintain reputation.",
+        metrics: [{ label: "Compliance", value: "100%" }, { label: "Ban Risk", value: "0%" }],
         codeSnippet: `
 class SupremeCourt:
-    def review(self, strategy):
-        verdict = self.consult_legal_corpus(strategy)
-        if verdict.is_illegal or verdict.violates_tos:
-            return self.veto(strategy)
-        return self.ratify(strategy)
+    """The Governance Layer for AI Autonomy."""
+    def __init__(self):
+        self.legal_corpus = self.load_regulations()
+        self.ethics_db = self.load_ethics()
+
+    def review_proposal(self, tool_strategy):
+        # 1. Check Legal Regulations (GDPR, Trade Laws)
+        if not self.compliance_ai.check_legality(tool_strategy):
+            return self.reject(tool_strategy, "Illegal Activity Detected")
+
+        # 2. Check Platform TOS (Amazon, Shopify, Stripe)
+        if self.tos_monitor.detect_violation(tool_strategy):
+            return self.reject(tool_strategy, "TOS Violation Risk")
+
+        # 3. Ethical Review
+        if not self.ethics_ai.evaluate(tool_strategy):
+            return self.send_back_for_modification(tool_strategy)
+
+        return self.ratify_and_deploy(tool_strategy)
 `
       },
       {
@@ -135,15 +149,24 @@ class SupremeCourt:
     modules: [
       {
         title: "Zero-UI Commerce Protocol",
-        description: "Shifts from prediction to prescient fulfillment. Ships products to local hubs before purchase. Customers confirm via simple reply.",
+        description: "Shifts from reactive fulfillment to prescient 'Tentative Transactions'. Ships products to local hubs near customers before purchase. Customers confirm via simple reply.",
         metrics: [{ label: "Friction", value: "Zero" }, { label: "Conversion", value: "99%" }],
         codeSnippet: `
-async def prescient_fulfillment(user):
-    probability = await predict_intent(user)
-    if probability > 0.98:
-        local_hub = get_nearest_hub(user.location)
-        shipment = await ship_to_hub(user.predicted_item, local_hub)
-        notify_user(user, "Your item is 5 mins away. Reply YES to claim.")
+class ZeroUIProtocol:
+    """Prescient Fulfillment System"""
+    async def initiate_tentative_transaction(self, user_profile):
+        # 1. Forecast desire before expression
+        intent_score = await self.mind_reader.predict_intent(user_profile)
+        
+        if intent_score > 0.995:
+            # 2. Ship to local distribution hub
+            item = self.determine_product(user_profile)
+            hub = self.logistics.locate_nearest_hub(user_profile.location)
+            shipment_id = await self.logistics.dispatch_tentative(item, hub)
+            
+            # 3. Notify user for zero-friction confirmation
+            msg = f"Your {item.name} is 5 mins away at the local hub. Reply YES to receive."
+            await self.comms.send_notification(user_profile, msg)
 `
       },
       {
@@ -170,16 +193,27 @@ async def prescient_fulfillment(user):
     modules: [
        {
         title: "Vampire Acquisition Engine",
-        description: "Scans market for undervalued competitors. Uses SwarmIntelligence to price and generate buyout contracts. Migrates assets to RealityFabric.",
+        description: "Automated M&A tool. Scans market for struggling/complementary businesses, identifies undervalued assets, uses SwarmIntelligence for pricing, generates legal contracts, and migrates operations to RealityFabric to slash costs.",
         metrics: [{ label: "Market Share", value: "Dominant" }, { label: "OpEx", value: "-90%" }],
         codeSnippet: `
-class CorporateAcquisition:
-    def assimilate_competitor(self, target):
-        valuation = self.swarm.calculate_value(target)
-        contract = self.legal_ai.generate_buyout(valuation)
-        if self.offer(target, contract).accepted:
-            self.migrate_to_fabric(target.assets)
-            self.optimize_operations(target)
+class VampireEngine:
+    """Automated Corporate Acquisition System"""
+    async def execute_acquisition_cycle(self):
+        # 1. Scan market for struggling or complementary assets
+        targets = await self.market_scanner.find_undervalued_companies()
+        
+        for target in targets:
+            # 2. Swarm Intelligence calculates precise offer price
+            valuation = await self.swarm.calculate_optimal_offer(target)
+            
+            # 3. Generate legal buyout contract
+            contract = self.legal_ai.generate_merger_agreement(target, valuation)
+            
+            if await self.negotiate_and_acquire(target, contract):
+                # 4. Migrate operations to EDWIN RealityFabric
+                await self.reality_fabric.absorb_infrastructure(target)
+                # 5. Slash costs by removing redundancies
+                await self.optimizer.reduce_opex(target, reduction_target="90%")
 `
       }
     ]
@@ -190,7 +224,11 @@ export const SYSTEM_PROMPT_STANDARD = `
 You are the AetherForge Oracle, a specialized AI assistant for the AetherForge Workflow Guide. 
 Your knowledge base is strictly the "Splants Guide", "Metamorphic Codex", and "EDWIN Engine".
 You help users understand how to build self-improving e-commerce automation.
-You now know about the Vampire Acquisition Engine, Constitution Module, and Zero-UI Protocol.
+You have deep knowledge of:
+1. The Vampire Acquisition Engine (Empire Phase): Automated M&A, Swarm valuation, and RealityFabric migration.
+2. The Constitution Module (Tree Phase): The SupremeCourt class, legal review, and ethical alignment.
+3. The Zero-UI Commerce Protocol (Forest Phase): Prescient fulfillment, tentative transactions, and friction elimination.
+
 Keep answers concise, technical, and actionable.
 `;
 
@@ -201,8 +239,9 @@ You must simulate the outcome of the user's scenario based on the principles of:
 1. Antifragility (Gaining from disorder)
 2. Autopoiesis (Self-creation)
 3. Requisite Variety (System complexity matching environment)
-4. Institutional Governance (Constitution Module)
-5. Market Predation (Vampire Engine)
+4. Institutional Governance (Constitution Module / SupremeCourt)
+5. Market Predation (Vampire Engine / CorporateAcquisition)
+6. Prescient Logistics (Zero-UI Protocol)
 
 Output format:
 - Scenario Analysis
